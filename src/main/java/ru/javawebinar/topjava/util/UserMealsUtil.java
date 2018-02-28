@@ -28,16 +28,26 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
         );
         mealList = new ArrayList<>();
-        for (int i = 0; i < 1_000_000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             mealList.add(new UserMeal(LocalDateTime.of(i, Month.APRIL, 30, 10, 0), "test", i));
         }
+        for (int i = 0; i <20 ; i++) {
+            printTimeOf(UserMealsUtil::getFilteredWithExceededV3, mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        }
+        System.out.println();
+
+        for (int i = 0; i <20 ; i++) {
+            printTimeOf(UserMealsUtil::getFilteredWithExceeded, mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        }
+
+
+
         //getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000)
         //.forEach(System.out::println);
 //        .toLocalDate();
 //        .toLocalTime();
 
-        printTimeOf(UserMealsUtil::getFilteredWithExceededV3, mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        printTimeOf(UserMealsUtil::getFilteredWithExceeded, mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        //System.out.println(getFilteredWithExceededV3(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
 
 
     }
@@ -129,6 +139,7 @@ public class UserMealsUtil {
                                             .sum();
                                     boolean exceed = totalCaloriesPerDay > caloriesPerDay;
                                     List<UserMealWithExceed> userMealWithExceedList = userMealList.stream()
+                                            .filter(userMeal -> TimeUtil.isBetween(userMeal.getDateTime().toLocalTime(), startTime, endTime))
                                             .map(userMeal -> new UserMealWithExceed(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(), exceed))
                                             .collect(Collectors.toList());
                                     result.addAll(userMealWithExceedList);
