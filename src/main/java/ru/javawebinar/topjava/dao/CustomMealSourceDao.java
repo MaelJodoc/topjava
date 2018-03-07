@@ -32,7 +32,7 @@ public class CustomMealSourceDao implements MealDao {
     }
 
     @Override
-    public void delete(Meal meal) {
-        mealSource.delete(meal);
+    public void delete(long id) {
+        mealSource.delete(id);
     }
 }

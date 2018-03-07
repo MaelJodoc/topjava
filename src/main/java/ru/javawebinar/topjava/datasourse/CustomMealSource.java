@@ -53,8 +53,8 @@ public class CustomMealSource {
         return mealMap.replace(id, newMeal);
     }
 
-    public void delete(Meal meal) {
-        mealMap.remove(meal);
+    public void delete(long id) {
+        mealMap.remove(id);
     }
 
     private long nextId() {
