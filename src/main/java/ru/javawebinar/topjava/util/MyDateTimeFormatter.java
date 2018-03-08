@@ -14,6 +14,7 @@ public class MyDateTimeFormatter {
     }
 
     public static LocalDateTime toLocalDateTime(String string) {
+        string = string.replace('T', ' ');
         return LocalDateTime.parse(string, formatter);
     }
 }

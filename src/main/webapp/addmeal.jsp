@@ -12,9 +12,9 @@
 </head>
 <body>
 <form action="meals">
-    <input type="hidden" name="action" value="add">
+    <input type="hidden" name="action" value="addMeal">
 
-    <p>Time<input type="datetime-local" name="localTime"></p>
+    <p>Time<input type="datetime-local" name="dateTime"></p>
 
     <p>Description<input type="text" name="description"></p>
 

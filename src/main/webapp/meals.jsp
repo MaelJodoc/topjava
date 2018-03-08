@@ -18,7 +18,7 @@
     <% List<MealWithExceed> meals = (List<MealWithExceed>) request.getAttribute("meals");
         for (MealWithExceed m : meals) {
             String cssClass = m.isExceed() ? "red" : "green";
-            String deleteHref = "meals?action=delete&id=" + m.getId();
+            String deleteHref = "meals?action=deleteMeal&id=" + m.getId();
             String editHref = "meals?action=showUpdateForm&id=" + m.getId()
                     + "&dateTime=" + m.getDateTime()
                     + "&calories=" + m.getCalories()

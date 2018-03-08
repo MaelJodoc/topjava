@@ -1,5 +1,6 @@
 <%@ page import="ru.javawebinar.topjava.model.Meal" %>
 <%@ page import="java.time.LocalDateTime" %>
+<%@ page import="ru.javawebinar.topjava.model.MealWithExceed" %>
 <%--
   Created by IntelliJ IDEA.
   User: Ebozavreg
@@ -15,14 +16,14 @@
 <body>
 <%
     Meal meal = (Meal) request.getAttribute("meal");
-    long id = (long) request.getAttribute("id");
+    long id = meal.getId();
     String description = meal.getDescription();
     int calories = meal.getCalories();
     LocalDateTime dateTime = meal.getDateTime();
 %>
 
 <form action="meals">
-    <input type="hidden" name="action" value="update">
+    <input type="hidden" name="action" value="updateMeal">
     <input type="hidden" name="id" value=<%=id%>>
 
     <p>Time<input type="datetime-local" name="localTime" value=<%=dateTime%>></p>

@@ -24,11 +24,11 @@ public class DeleteMeal extends AbstractMealCommand {
             try {
                 long id = Long.parseLong(param);
                 mealDao.delete(id);
-                new ShowMeals(request, response, mealDao).execute();
             } catch (NumberFormatException e) {
                 e.printStackTrace();
+            } finally {
+                new ShowMeals(request, response, mealDao).execute();
             }
-            new ShowMeals(request, response, mealDao).execute();
         }
     }
 }

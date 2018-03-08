@@ -22,8 +22,11 @@ public class MealCommandExecutor {
                     return new DeleteMeal(request, response, mealDao);
                 case "updateMeal":
                     return new UpdateMeal(request, response, mealDao);
+                case "showUpdateForm":
+                    return new ShowUpdateForm(request, response, mealDao);
+                default:
+                    return null;
             }
         } else return new ShowMeals(request, response, mealDao);
-        return null;
     }
 }
