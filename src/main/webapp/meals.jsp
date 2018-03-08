@@ -11,15 +11,27 @@
 <html>
 <head>
     <title></title>
+    <link rel="stylesheet" href="css/meals.css">
 </head>
 <body>
 <ul>
     <% List<MealWithExceed> meals = (List<MealWithExceed>) request.getAttribute("meals");
         for (MealWithExceed m : meals) {
+            String cssClass = m.isExceed() ? "red" : "green";
+            String deleteHref = "meals?action=delete&id=" + m.getId();
+            String editHref = "meals?action=showUpdateForm&id=" + m.getId()
+                    + "&dateTime=" + m.getDateTime()
+                    + "&calories=" + m.getCalories()
+                    + "&description=" + m.getDescription();
     %>
-    <li>item<%=m.toString()%>
+    <li class=<%=cssClass%>>
+        item<%=m.toString()%>
+        <a href=<%=deleteHref%>>delete</a>
+        <a href=<%=editHref%>>edit</a>
     </li>
     <%}%>
 </ul>
+<br>
+<a href="addmeal.jsp">add</a>
 </body>
 </html>
