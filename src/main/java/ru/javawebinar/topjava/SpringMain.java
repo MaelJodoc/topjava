@@ -25,7 +25,7 @@ public class SpringMain {
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
             List<MealWithExceed> allForUser = mealRestController.getAllForUser();
             allForUser.forEach(System.out::println);
-            mealRestController.deleteMeal(new Meal(456, LocalDateTime.now(), "", 1000, 3));
+
         }
     }
 }

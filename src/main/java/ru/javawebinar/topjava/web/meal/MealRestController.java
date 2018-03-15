@@ -25,16 +25,25 @@ public class MealRestController {
         return MealsUtil.getFilteredWithExceeded(meals, AuthorizedUser.getCaloriesPerDay(), LocalTime.MIN, LocalTime.MAX);
     }
 
+    public Meal getMeal(int id) {
+        return service.get(id, AuthorizedUser.id());
+    }
+
     public void addMeal(Meal meal) {
         service.create(meal);
     }
 
-    public void deleteMeal(Meal meal) {
-        service.delete(meal.getId(), AuthorizedUser.id());
+    public void deleteMeal(int id) {
+        service.delete(id, AuthorizedUser.id());
     }
 
     public void updateMeal(Meal meal) {
         service.update(meal, AuthorizedUser.id());
+    }
+
+    public void save(Meal meal) {
+        meal.setUserId(AuthorizedUser.id());
+        service.create(meal);
     }
 
 }

@@ -1,3 +1,6 @@
+<%@ page import="ru.javawebinar.topjava.to.DateFilter" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.LocalTime" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -21,7 +24,37 @@
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
-    <hr/>
+    <hr>
+    <%
+        DateFilter dateFilter = new DateFilter(LocalDate.MIN, LocalDate.MAX, LocalTime.MIN, LocalTime.MAX);
+        if (request.getAttribute("dateFilter") != null) {
+            dateFilter = (DateFilter) request.getAttribute("dateFilter");
+        }
+    %>
+    <form method="post" action="meals" id="filterForm">
+        <input type="hidden" name="action" value="filtered">
+        <dl>
+            <dt>От даты:</dt>
+            <dd><input type="date" name="startDate" value=<%=dateFilter.getStartDate()%>></dd>
+        </dl>
+        <dl>
+            <dt>До даты:</dt>
+            <dd><input type="date" name="stopDate" value=<%=dateFilter.getStopDate()%>></dd>
+        </dl>
+        <dl>
+            <dt>От времени:</dt>
+            <dd><input type="time" name="startTime" value=<%=dateFilter.getStartTime()%>></dd>
+        </dl>
+        <dl>
+            <dt>До времени:</dt>
+            <dd><input type="time" name="stopTime" value=<%=dateFilter.getStopTime()%>></dd>
+        </dl>
+        <button type="submit">Применить</button>
+        <button onclick="window.history.back()"
+                type="button">Сброс
+        </button>
+    </form>
+    <hr>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>

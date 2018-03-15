@@ -32,8 +32,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public void delete(int mealId, int userId) {
-        if (mealId != userId) throw new NotFoundException("you try delete meal of another user");
-        if (repository.get(mealId) == null) throw new NotFoundException("meal not found");
+        Meal meal = repository.get(mealId);
+        if (meal == null) throw new NotFoundException("meal not found");
+        if (meal.getUserId() != userId) throw new NotFoundException("you try delete meal of another user");
         repository.remove(mealId);
     }
 
