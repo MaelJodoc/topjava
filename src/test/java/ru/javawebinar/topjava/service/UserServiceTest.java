@@ -36,6 +36,7 @@ public class UserServiceTest {
     @Autowired
     private UserService service;
 
+
     @Test
     public void create() throws Exception {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.ROLE_USER));
