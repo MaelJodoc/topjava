@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -58,7 +59,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
             int mealId = simpleJdbcInsert.executeAndReturnKey(mapSqlParameterSource).intValue();
             meal.setId(mealId);
         } else {
-            String sql = "UPDATE meals SET user_id=:user_id, date_time=:date_time, description=:description, calories=:calories";
+            String sql = "UPDATE meals SET date_time=:date_time, description=:description, calories=:calories WHERE (user_id=:user_id AND id=:id)";
             int update = namedParameterJdbcTemplate.update(sql, mapSqlParameterSource);
             if (update == 0) return null;
         }
@@ -72,7 +73,11 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return jdbcTemplate.queryForObject("SELECT* FROM meals WHERE id=? AND user_id=?", ROW_MAPPER, id, userId);
+        try {
+            return jdbcTemplate.queryForObject("SELECT* FROM meals WHERE id=? AND user_id=?", ROW_MAPPER, id, userId);
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     @Override
