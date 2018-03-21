@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,11 +44,19 @@ public class MealServiceImplTest {
 
     private static Logger logger = LoggerFactory.getLogger(MealServiceImplTest.class);
 
+
+    @Before
+    @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+    public void init() {
+        logger.info("populate db");
+    }
+
     @AfterClass
     @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
     public static void exit() {
         logger.info("populate db");
     }
+
 
     @Test
     public void create() {
@@ -105,9 +113,56 @@ public class MealServiceImplTest {
 
     @Test
     public void getAll() throws Exception {
+        List<Meal> meals = mealService.getAll(ADMIN_ID);
+        assertTrue(meals.size() == 3 &&
+                meals.contains(new Meal(
+                        100_011,
+                        LocalDateTime.of(2018, 3, 15, 7, 0),
+                        "завтрак админа",
+                        700)) &&
+                meals.contains(new Meal(
+                        100_012,
+                        LocalDateTime.of(2018, 3, 15, 14, 0),
+                        "обед админа",
+                        1200)) &&
+                meals.contains(new Meal(
+                        100_013,
+                        LocalDateTime.of(2018, 3, 15, 20, 0),
+                        "ужин админа",
+                        500))
+        );
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getAllForUnavailable() {
+        mealService.getAll(WRONG_USER_ID);
     }
 
     @Test
     public void update() throws Exception {
+        Meal newMeal = new Meal(100_002,
+                LocalDateTime.of(1111, 1, 1, 1, 1),
+                "updated",
+                1488);
+        Meal updated = mealService.update(newMeal, USER_ID);
+        assertTrue(newMeal.equals(updated));
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateNoMeal() {
+        new Meal(WRONG_MEAL_ID,
+                LocalDateTime.of(1111, 1, 1, 1, 1),
+                "updated",
+                1488);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateAnotherUserMeal() {
+        Meal newMeal = mealService.create(NEW_MEAL, USER_ID);
+        Meal updated = new Meal(newMeal.getId(),
+                LocalDateTime.of(1111, 1, 1, 1, 1),
+                "updated",
+                1488);
+        mealService.update(updated, ADMIN_ID);
     }
 }
